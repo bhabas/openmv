@@ -791,6 +791,36 @@ STATIC mp_obj_t py_image_get_pixel(uint n_args, const mp_obj_t *args, mp_map_t *
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_get_pixel_obj, 2, py_image_get_pixel);
 
+STATIC mp_obj_t py_image_set_pixel2(uint n_args, const mp_obj_t *args, mp_map_t *kw_args) {
+
+    // GET IMAGE POINTER
+    image_t *arg_img = py_helper_arg_to_image_not_compressed(args[0]);
+
+    // GET X AND Y POSITION ARGUMENTS
+    // works for both x,y and (x,y) tuple
+    const mp_obj_t *arg_vec;
+    uint offset = py_helper_consume_array(n_args, args, 1, 2, &arg_vec);
+    int arg_x = mp_obj_get_int(arg_vec[0]);
+    int arg_y = mp_obj_get_int(arg_vec[1]);
+
+    int arg_c = 
+        py_helper_keyword_color(arg_img, n_args, args, offset, kw_args, -1); // This function helps break up inputs
+
+    if ((!IM_X_INSIDE(arg_img, arg_x)) || (!IM_Y_INSIDE(arg_img, arg_y))) {
+        return args[0];
+    }
+
+    switch (arg_img->pixfmt) {
+        case PIXFORMAT_GRAYSCALE: 
+        {
+            IMAGE_PUT_GRAYSCALE_PIXEL(arg_img, arg_x, arg_y, arg_c);
+            return args[0];
+        }
+        default: return args[0];
+    }
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_set_pixel2_obj, 2, py_image_set_pixel2);
+
 STATIC mp_obj_t py_image_set_pixel(uint n_args, const mp_obj_t *args, mp_map_t *kw_args) {
     image_t *arg_img = py_helper_arg_to_image_not_compressed(args[0]);
 
@@ -6296,6 +6326,7 @@ static const mp_rom_map_elem_t locals_dict_table[] = {
     {MP_ROM_QSTR(MP_QSTR_bytearray),           MP_ROM_PTR(&py_image_bytearray_obj)},
     {MP_ROM_QSTR(MP_QSTR_get_pixel),           MP_ROM_PTR(&py_image_get_pixel_obj)},
     {MP_ROM_QSTR(MP_QSTR_set_pixel),           MP_ROM_PTR(&py_image_set_pixel_obj)},
+    {MP_ROM_QSTR(MP_QSTR_set_pixel2),           MP_ROM_PTR(&py_image_set_pixel2_obj)},
     #ifdef IMLIB_ENABLE_MEAN_POOLING
     {MP_ROM_QSTR(MP_QSTR_mean_pool),           MP_ROM_PTR(&py_image_mean_pool_obj)},
     {MP_ROM_QSTR(MP_QSTR_mean_pooled),         MP_ROM_PTR(&py_image_mean_pooled_obj)},
