@@ -184,6 +184,7 @@ static mp_obj_t py_sensor_get_num(mp_obj_t arg1_obj, mp_obj_t arg2_obj){
     int arg1 = mp_obj_get_int(arg1_obj);
     int arg2 = mp_obj_get_float(arg2_obj);
     int result = my_c_function(arg1, arg2);
+    mp_printf(&mp_plat_print, "Value is: %d\n", result);
     return mp_obj_new_int(result);
 }
 
