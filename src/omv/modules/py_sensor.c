@@ -174,13 +174,16 @@ static mp_obj_t py_sensor_get_id() {
     return mp_obj_new_int(sensor_get_id());
 }
 
-static int my_c_function()
+static int my_c_function(int arg1, float arg2)
 {
-    return 42;
+    int res = arg1 + (int)arg2;
+    return res;
 }
 
-static mp_obj_t py_sensor_get_num(){
-    int result = my_c_function();
+static mp_obj_t py_sensor_get_num(mp_obj_t arg1_obj, mp_obj_t arg2_obj){
+    int arg1 = mp_obj_get_int(arg1_obj);
+    int arg2 = mp_obj_get_float(arg2_obj);
+    int result = my_c_function(arg1, arg2);
     return mp_obj_new_int(result);
 }
 
@@ -902,7 +905,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_width_obj,               py_sensor_wi
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_height_obj,              py_sensor_height);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_fb_obj,              py_sensor_get_fb);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_id_obj,              py_sensor_get_id);
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_num_obj,             py_sensor_get_num);
+STATIC MP_DEFINE_CONST_FUN_OBJ_2(py_sensor_get_num_obj,             py_sensor_get_num);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_frame_available_obj, py_sensor_get_frame_available);
 STATIC MP_DEFINE_CONST_FUN_OBJ_3(py_sensor_alloc_extra_fb_obj,      py_sensor_alloc_extra_fb);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_dealloc_extra_fb_obj,    py_sensor_dealloc_extra_fb);
