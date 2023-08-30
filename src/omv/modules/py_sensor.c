@@ -174,6 +174,16 @@ static mp_obj_t py_sensor_get_id() {
     return mp_obj_new_int(sensor_get_id());
 }
 
+static int my_c_function()
+{
+    return 42;
+}
+
+static mp_obj_t py_sensor_get_num(){
+    int result = my_c_function();
+    return mp_obj_new_int(result);
+}
+
 static mp_obj_t py_sensor_get_frame_available() {
     return mp_obj_new_bool(framebuffer->tail != framebuffer->head);
 }
@@ -892,6 +902,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_width_obj,               py_sensor_wi
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_height_obj,              py_sensor_height);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_fb_obj,              py_sensor_get_fb);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_id_obj,              py_sensor_get_id);
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_num_obj,             py_sensor_get_num);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_get_frame_available_obj, py_sensor_get_frame_available);
 STATIC MP_DEFINE_CONST_FUN_OBJ_3(py_sensor_alloc_extra_fb_obj,      py_sensor_alloc_extra_fb);
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_sensor_dealloc_extra_fb_obj,    py_sensor_dealloc_extra_fb);
@@ -1068,6 +1079,7 @@ STATIC const mp_map_elem_t globals_dict_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_height),              (mp_obj_t) &py_sensor_height_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_get_fb),              (mp_obj_t) &py_sensor_get_fb_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_get_id),              (mp_obj_t) &py_sensor_get_id_obj },
+    { MP_OBJ_NEW_QSTR(MP_QSTR_get_num),             (mp_obj_t) &py_sensor_get_num_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_get_frame_available), (mp_obj_t) &py_sensor_get_frame_available_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_alloc_extra_fb),      (mp_obj_t) &py_sensor_alloc_extra_fb_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_dealloc_extra_fb),    (mp_obj_t) &py_sensor_dealloc_extra_fb_obj },
