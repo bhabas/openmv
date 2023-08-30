@@ -791,6 +791,28 @@ STATIC mp_obj_t py_image_get_pixel(uint n_args, const mp_obj_t *args, mp_map_t *
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_get_pixel_obj, 2, py_image_get_pixel);
 
+STATIC mp_obj_t py_image_set_pixel3(mp_obj_t img_obj, mp_obj_t arg1_obj, mp_obj_t arg2_obj)
+{
+    image_t *arg_img = (image_t *) py_image_cobj(img_obj);
+    int arg_x = mp_obj_get_int(arg1_obj);
+    int arg_y = mp_obj_get_int(arg2_obj);
+
+    mp_printf(&mp_plat_print, "Value is: %d\n", arg_img->h);
+
+    switch (arg_img->pixfmt) {
+        case PIXFORMAT_GRAYSCALE: 
+        {
+            IMAGE_PUT_GRAYSCALE_PIXEL(arg_img, arg_x, arg_y, 255);
+            return img_obj;
+        }
+        default: return img_obj;
+    }
+
+    return img_obj;
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_3(py_image_set_pixel3_obj, py_image_set_pixel3);
+
+
 STATIC mp_obj_t py_image_set_pixel2(uint n_args, const mp_obj_t *args, mp_map_t *kw_args) {
 
     // GET IMAGE POINTER
@@ -6327,6 +6349,8 @@ static const mp_rom_map_elem_t locals_dict_table[] = {
     {MP_ROM_QSTR(MP_QSTR_get_pixel),           MP_ROM_PTR(&py_image_get_pixel_obj)},
     {MP_ROM_QSTR(MP_QSTR_set_pixel),           MP_ROM_PTR(&py_image_set_pixel_obj)},
     {MP_ROM_QSTR(MP_QSTR_set_pixel2),           MP_ROM_PTR(&py_image_set_pixel2_obj)},
+    {MP_ROM_QSTR(MP_QSTR_set_pixel3),           MP_ROM_PTR(&py_image_set_pixel3_obj)},
+
     #ifdef IMLIB_ENABLE_MEAN_POOLING
     {MP_ROM_QSTR(MP_QSTR_mean_pool),           MP_ROM_PTR(&py_image_mean_pool_obj)},
     {MP_ROM_QSTR(MP_QSTR_mean_pooled),         MP_ROM_PTR(&py_image_mean_pooled_obj)},
